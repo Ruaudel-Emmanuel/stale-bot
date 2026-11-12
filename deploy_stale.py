@@ -77,8 +77,12 @@ def deploy_to_repo(full, pat, content_b64, force):
                 {"ref": f"refs/heads/{BRANCH}", "sha": base_sha})
     if st not in (201, 422):  # 422 = branche existe déjà
         return "error", f"create branch: HTTP {st}"
-    st, _ = api("PUT", f"{API}/repos/{full}/contents/{WORKFLOW_PATH}", pat,
-                {"message": "chore: ajoute le bot stale [skip ci]", "content": content_b64, "branch": BRANCH})
+    st, cur = api("GET", f"{API}/repos/{full}/contents/{WORKFLOW_PATH}?ref={BRANCH}", pat)
+    sha_b = cur.get("sha") if st == 200 else None
+    put_body = {"message": "chore: ajoute/met à jour le bot stale [skip ci]", "content": content_b64, "branch": BRANCH}
+    if sha_b:
+        put_body["sha"] = sha_b
+    st, _ = api("PUT", f"{API}/repos/{full}/contents/{WORKFLOW_PATH}", pat, put_body)
     if st not in (200, 201):
         return "error", f"PUT branche: HTTP {st}"
     st, pr = api("POST", f"{API}/repos/{full}/pulls", pat,
