@@ -13,13 +13,6 @@ ici le bot *agit* — label « stale » puis fermeture automatique.
 - **Exemptions** : labels `pinned`, `security`. Le bot ignore toute issue/PR avec activité récente.
 - Permissions du workflow : `issues: write`, `pull-requests: write` (GITHUB_TOKEN).
 
-## 🚀 Déploiement
-
-```bash
-sudo python3 /home/ubuntu/projects/stale-bot/deploy_stale.py              # tous les dépôts actifs
-sudo python3 /home/ubuntu/projects/stale-bot/deploy_stale.py --repo NOM   # test sur 1 dépôt
-sudo python3 /home/ubuntu/projects/stale-bot/deploy_stale.py --force      # réécrire partout
-```
 
 - Push direct sur `main` quand c'est autorisé.
 - Si `main` est protégé (ruleset « PR requise ») → branche `chore/add-stale-bot` + **PR ouverte** :
